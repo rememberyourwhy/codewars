@@ -13,4 +13,10 @@ def nb_year(p0, percent, aug, p):
 
 print(nb_year(1000, 2.0, 50, 1214))
 #solution page:
-#there are recursive function and
+#there are recursive function and.
+
+#recursion
+# def nb_year(p0, percent, aug, p, years = 0):
+#     if p0 < p:
+#         return nb_year(p0 + int(p0 * percent / 100) + aug, percent, aug, p, years + 1)
+#     return years
