@@ -7,6 +7,8 @@
 #     return result
 
 # Now awake your inner one liner
+# def array_diff(a, b):
+#     return [x for x in a not in b]
 
 def array_diff(a, b, index = 0, result = []):
     if index < len(a):
