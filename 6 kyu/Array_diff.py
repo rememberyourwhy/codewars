@@ -16,5 +16,5 @@ def array_diff(a, b, index = 0, result = []):
         else:
             return array_diff(a, b, index + 1, result)
     return result
-
+#TODO: Fix this BuG
 print(array_diff([1,2], [1]))
