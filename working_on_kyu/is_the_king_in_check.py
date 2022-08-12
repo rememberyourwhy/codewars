@@ -19,28 +19,60 @@
 # and no_hindrance(piece, piece_coordinate = [  ,  ], king_coordinate = [  ,  ]
 
 def loop_and_save(chessboard):
-    cor_to_pieces = {}
+    cor_and_pieces = []
+    king_cor = tuple()
     for x in range(8):
         for y in range(8):
             element = chessboard[x][y]
             if element != " " and element != "♔":
-                cor_to_pieces[f"{x}, {y}"] = element
+                new_piece = (x, y), element
+                cor_and_pieces.append(new_piece)
             elif element == "♔":
-                king_cor = f"{x}, {y}"
+                king_cor = (x, y)
             else:
                 pass
-    return cor_to_pieces, king_cor
+    return cor_and_pieces, king_cor
+    # Output will look like this
+    # [((3, 2), '♜'), ((6, 3), '♜')]
+    # and (3, 4)
+
+
+def is_potential_check(piece_item, king_coordination):
+    piece_coordination, piece_symbol = piece_item
+    # subtracted_coordination (sub_cor)
+    x = abs(piece_coordination[0] - king_coordination[0])
+    y = abs(piece_coordination[1] - king_coordination[1])
+    condition_dict = {
+        "♟": x == y and x == 1,
+        "♜": x == 0 or y == 0,
+        "♞": (x == 2 and y == 1) or (x == 1 and y == 2),
+        "♝": x == y,
+        "♛": x == 0 or y == 0 or x == y
+    }
+    return condition_dict[piece_symbol]
 
 
 board = [
-            [' ',' ',' ',' ',' ',' ',' ','♝'],
             [' ',' ',' ',' ',' ',' ',' ',' '],
             [' ',' ',' ',' ',' ',' ',' ',' '],
             [' ',' ',' ',' ',' ',' ',' ',' '],
+            [' ',' ','♜',' ','♔',' ',' ',' '],
             [' ',' ',' ',' ',' ',' ',' ',' '],
             [' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' '],
-            ['♔',' ',' ',' ',' ',' ',' ',' ']
+            [' ',' ',' ','♜',' ',' ',' ',' '],
+            [' ',' ',' ',' ',' ',' ',' ',' ']
         ]
+
 print(loop_and_save(board))
+# return two value
+# first [((3, 2), '♜'), ((6, 3), '♜')]
+# second (3, 4)
+
+def no_hindrance(cor_piece, cor_king, chessboard):
+    x_piece, y_piece = cor_piece
+    x_king, y_king = cor_king
+
+
+
+
 
