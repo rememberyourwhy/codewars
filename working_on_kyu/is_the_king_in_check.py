@@ -43,7 +43,7 @@ def is_potential_check(piece_item, king_coordination):
     x = abs(piece_coordination[0] - king_coordination[0])
     y = abs(piece_coordination[1] - king_coordination[1])
     condition_dict = {
-        "♟": x == y and x == 1,
+        "♟": x == y and x == 1 and piece_coordination[0] - king_coordination[0] < 0,
         "♜": x == 0 or y == 0,
         "♞": (x == 2 and y == 1) or (x == 1 and y == 2),
         "♝": x == y,
@@ -52,27 +52,59 @@ def is_potential_check(piece_item, king_coordination):
     return condition_dict[piece_symbol]
 
 
-board = [
-            [' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ','♜',' ','♔',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ','♜',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ']
-        ]
+def distance_to_step(distance):
+    if distance != 0:
+        if distance < 0:
+            return -1
+        else:
+            return 1
+    else:
+        return 0
 
-print(loop_and_save(board))
-# return two value
-# first [((3, 2), '♜'), ((6, 3), '♜')]
-# second (3, 4)
 
 def no_hindrance(cor_piece, cor_king, chessboard):
     x_piece, y_piece = cor_piece
     x_king, y_king = cor_king
+    x_distance = x_king - x_piece
+    y_distance = y_king - y_piece
+    x_step = distance_to_step(x_distance)
+    y_step = distance_to_step(y_distance)
+    x_next = x_piece + x_step
+    y_next = y_piece + y_step
+    while x_next != x_king or y_next != y_king:
+        if chessboard[x_next][y_next] != " ":
+            return False
+        x_next += x_step
+        y_next += y_step
+    return True
 
 
+def king_is_in_check(chessboard):
+    # Step 1: save white pieces and black_king coordinates
+    # Step 2: check if they are in potential position to check black king
+    # Step 3: check if there are hindrances between king and that piece
+    # can be rook, bishop or queen
+    cor_and_piece_symbol, king_cor = loop_and_save(chessboard)
+    for piece in cor_and_piece_symbol:
+        # pawn and knight no worry abt hindrance
+        if is_potential_check(piece, king_cor) and (piece[1] == "♟" or piece[1] == "♞"):
+            return True
+        # others do, so we have to check them
+        elif is_potential_check(piece, king_cor) and no_hindrance(piece[0], king_cor, chessboard):
+            return True
+        else:
+            pass
+    return False
 
-
-
+board = [
+            [' ',' ',' ',' ',' ',' ',' ',' '],
+            [' ',' ',' ',' ',' ',' ',' ',' '],
+            [' ',' ',' ',' ',' ',' ',' ',' '],
+            [' ',' ',' ',' ','♔',' ',' ',' '],
+            [' ',' ',' ',' ',' ',' ',' ',' '],
+            [' ',' ',' ',' ','♜',' ',' ',' '],
+            [' ',' ',' ',' ',' ',' ',' ',' '],
+            [' ',' ',' ',' ','♜',' ',' ',' ']
+        ]
+print(no_hindrance((3, 2), (3, 4), board))
+print(king_is_in_check(chessboard=board))
