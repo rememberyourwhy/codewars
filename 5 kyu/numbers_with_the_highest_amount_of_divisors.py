@@ -48,7 +48,7 @@ def highest_amount_divisors(arr):
             result.append(_)
     return max_divisors, sorted(result)
 
-
+# ---------------------- Main  --------------------------------------------#
 def proc_arrInt(listNum):
     num_counter = num_int(listNum)
     prime_num_counter = prime_counter(listNum)
